@@ -77,12 +77,12 @@ data = {
     'd': au_json['d'],
     'p': au_json['p'],
 }
-sg_rep = session.post(
+sg_resp = session.post(
     f"http://www.botmasterlabs.net/sg.php?randm={randm}&sec={sec}", data=data, headers=headers,
 )
 
-if sg_rep.text.startswith(')'):
-    uri = sg_rep.text.split(')window.location.href="')[1].split('"')[0]
+if sg_resp.text.startswith(')'):
+    uri = sg_resp.text.split(')window.location.href="')[1].split('"')[0]
     url = f'http://www.botmasterlabs.net{uri}'
     user_panel_resp = session.get(url, headers=headers)
     try:
@@ -97,15 +97,15 @@ if sg_rep.text.startswith(')'):
 
     logger.success(f"{login}:{password} | {license_type} | {subscription}")
 
-elif 'loadingErrorSay' in sg_rep.text:
-    error_key = sg_rep.text.split(',"', 1)[1].split('"')[0]
+elif 'loadingErrorSay' in sg_resp.text:
+    error_key = sg_resp.text.split(',"', 1)[1].split('"')[0]
     error_message = error_messages.get(error_key, f'Invalid error key "{error_key}"')
     logger.error(f"{error_message} | {login}:{password}")
 
-elif not sg_rep.text:
-    logger.error(f'Необходима смена IP {sg_rep.status_code}')
+elif not sg_resp.text:
+    logger.error(f'Необходима смена IP {sg_resp.status_code}')
 
 else:
-    logger.error(f"Неизвестная ошибка: {sg_rep.text}")
+    logger.error(f"Неизвестная ошибка: {sg_resp.text}")
 
 input("Enter to exit...")
