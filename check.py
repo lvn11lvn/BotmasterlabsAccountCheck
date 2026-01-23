@@ -1,5 +1,10 @@
-import requests
-from loguru import logger
+try:
+    import requests
+    from loguru import logger
+except ImportError as e:
+    print(e)
+    input("Enter to exit...")
+    exit()
 
 '''
 Я использую JS сервер который копирует поведение сайта
@@ -102,3 +107,5 @@ elif not sg_rep.text:
 
 else:
     logger.error(f"Неизвестная ошибка: {sg_rep.text}")
+
+input("Enter to exit...")
